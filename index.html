@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Gocery store</title>
+	<link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
+	<link rel="stylesheet" href="css/index.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	<script src="https://unpkg.com/react@16.9.0-alpha.0/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@16.9.0-alpha.0/umd//react-dom.development.js" crossorigin></script>
+</head>
+<body>
+	<div id="root">
+		<div id="left">
+			<h2>Catgory <i class="fas fa-sitemap"></i></h2>
+			<div id="catgory">
+				<div id="level1">
+					<div class="block lv1"><i class="fas fa-store"></i> Gocery Store</div>
+				</div>
+				<div id="level2">
+					<div class="block lv2" data-target="frozen_food">Frozen Food</div>
+					<div class="block lv2" data-target="fresh_food">Fresh Food</div>
+					<div class="block lv2" data-target="beverages">Beverages</div>
+					<div class="block lv2" data-target="home_health">Home Health</div>
+					<div class="block lv2" data-target="pet_food">Pet Food</div>
+				</div>
+				<div id="level3">
+					<!-- frozen_food area -->
+					<div id="frozen_food" class="level3_box">
+						<div class="level3">
+							<div class="block clickable" data-id="1002">Hamburger Patties</div>
+							<div class="block">FishFingers</div>
+							<div class="block clickable" data-id="1003">Shelled Prawns</div>
+							<div class="block">Tub Ice Cream</div>
+						</div>
+						<div class="level4">
+							<div class="block clickable" data-id="1000">500 Gram</div>
+							<div class="block clickable" data-id="1001">1000Gram</div>
+							<div class="block clickable" data-id="1004">1 Litre</div>
+							<div class="block clickable" data-id="1005">2 Litre</div>
+						</div>
+					</div>
+					<!-- fresh_food area -->
+					<div id="fresh_food" class="level3_box">
+						<div class="level3">
+							<div class="block clickable" data-id="3002">T'Bone<br>Steak</div>
+							<div class="block">Cheddar<br>Cheese</div>
+							<div class="block clickable" data-id="3003">Navel<br>Oranges</div>
+							<div class="block clickable" data-id="3004">Bananas</div>
+							<div class="block clickable" data-id="3006">Grapes</div>
+							<div class="block clickable" data-id="3007">Apples</div>
+							<div class="block clickable" data-id="3005">Peaches</div>
+						</div>
+						<div class="level4">
+							<div class="block clickable" data-id="3000">500 Gram</div>
+							<div class="block clickable" data-id="3001">1000 Gram</div>
+						</div>
+					</div>
+					<!-- beverages area -->
+					<div id="beverages" class="level3_box">
+						<div class="level3">
+							<div class="block">Coffee</div>
+							<div class="block">Earl Grey Tea Bags</div>
+							<div class="block clickable" data-id="4005">Chocolate Bar</div>
+						</div>
+						<div class="level4">
+							<div class="block clickable" data-id="4003">200 Gram</div>
+							<div class="block clickable" data-id="4004">500 Gram</div>
+							<div class="block clickable" data-id="4000">Pack 25</div>
+							<div class="block clickable" data-id="4001">Pack 100</div>
+							<div class="block clickable" data-id="4002">Pack 200</div>
+						</div>
+					</div>
+					<!-- home_health area -->
+					<div id="home_health" class="level3_box">
+						<div class="level3">
+							<div class="block clickable" data-id="2002">Bath Soap</div>
+							<div class="block">Panadol</div>
+							<div class="block clickable" data-id="2005">Washing Powder</div>
+							<div class="block">Garbage Bags</div>
+							<div class="block clickable" data-id="2006">Laundry Bleach</div>
+						</div>
+						<div class="level4">
+							<div class="block clickable" data-id="2000">Pack 24</div>
+							<div class="block clickable" data-id="2001">Bottle 50</div>
+							<div class="block clickable" data-id="2003">small (pack 10)</div>
+							<div class="block clickable" data-id="2004">large (pack 50)</div>
+						</div>
+					</div>
+					<!-- pet_food area-->
+					<div id="pet_food" class="level3_box">
+						<div class="level3">
+							<div class="block clickable" data-id="5002">Bird Food</div>
+							<div class="block clickable" data-id="5003">Cat Food</div>
+							<div class="block">Dry Dog Food</div>
+							<div class="block clickable" data-id="5004">Fish Food</div>
+						</div>
+						<div class="level4">
+							<div class="block clickable" data-id="5001">1 kg.Pack</div>
+							<div class="block clickable" data-id="5000">5 kg.Pack</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="right">
+			<div id="top">
+				<h2>Product detail <i class="fas fa-list-alt"></i></h2>
+				<div id="product_detail"></div>
+			</div>
+			<div id="bottom">
+				<h2>Shopping Cart <i class="fas fa-shopping-cart"></i></h2>
+				<div id="cart_table"></div>
+				<div class="button_box">
+					<a href="clearCart.php" id="clear_cart">Clear Cart</a>
+					<a href="###" id="check_out">Check out</a>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="module" src="js/index.js"></script>
+<script type="module" src="js/imgList.js"></script>
+</body>
+</html>
