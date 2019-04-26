@@ -18,8 +18,28 @@ blockLv2.forEach(function(e){
 		})
 		document.querySelector('#'+target).classList.add('active');
 	}
-
 })
+
+// update the cart when refreshing the page
+fetch('updateCart.php',{
+	method: 'POST',
+	headers: {
+		"Content-Type": "application/json; charset=utf-8",                                                                                                
+		"Access-Control-Origin": "*"
+	},
+	body: ''
+})
+.then((res) => {
+	res.json().then(function(data){
+		ReactDOM.render(
+			<Cart_table ref={(Cart_table) => {window.Cart_table = Cart_table}}/>,
+			document.querySelector('#cart_table')
+		)
+		window.Cart_table.updateCart(data);
+	})
+	
+})
+
 
 // Send getproduct request
 const catgory = document.querySelector('#catgory');
@@ -94,16 +114,23 @@ class Product_detail extends React.Component {
   }
 
   sendData = () => {
-  	fetch('addToCart.php',{
+  	fetch('updateCart.php',{
   		method: 'POST',
   		headers: {
-	  		"Content-Type": "application/json",                                                                                                
+	  		"Content-Type": "application/json; charset=utf-8",                                                                                                
 	  		"Access-Control-Origin": "*"
 	  	},
   		body:  JSON.stringify(this.state)
   	})
   	.then((res) => {
-  		// console.log(res);
+  		res.json().then(function(data){
+  			ReactDOM.render(
+  				<Cart_table ref={(Cart_table) => {window.Cart_table = Cart_table}}/>,
+  				document.querySelector('#cart_table')
+  			)
+  			window.Cart_table.updateCart(data);
+  		})
+  		
   	})
   }
 
@@ -153,6 +180,19 @@ class Product_info extends React.Component {
 
 // Cart_table components
 class Cart_table extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			list: []
+		}
+	}
+
+	updateCart(data){
+		this.setState({
+			list: data
+		})
+	}
+
 	render() {
 		return(
 			<table id="cart_table">
@@ -166,20 +206,62 @@ class Cart_table extends React.Component {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>cheddar cheese</td>
-						<td>500 gram</td>
-						<td>8.00</td>
-						<td>4</td>
-						<td>32.00</td>
-					</tr>
+					{
+						this.state.list.map((item, index) => {
+							return(
+								<Cart_list 
+										product_name={item.product_name}
+										unit_quantity={item.unit_quantity}
+										unit_price={item.unit_price}
+										counts={item.counts}
+										total_price={Math.floor(item.counts*item.unit_price*100)/100}
+										key={index}
+								/>)
+						})			
+					}
 				</tbody>
 			</table>
 		)
 	}
 }
 
-ReactDOM.render(
-	<Cart_table/>,
-	document.querySelector('#cart_table')
-)
+class Cart_list extends React.Component {
+	render() {
+		return(
+			<tr>
+				<td>{this.props.product_name}</td>
+				<td>{this.props.unit_quantity}</td>
+				<td>{this.props.unit_price}</td>
+				<td>{this.props.counts}</td>
+				<td>{this.props.total_price}</td>
+			</tr>
+		)
+	}
+}
+
+var clearCart = document.querySelector('#clear_cart');
+var confirmClear = document.querySelector('#confirm_clear');
+var yesButton = document.querySelector('#confirm_clear .yes');
+var noButton = document.querySelector('#confirm_clear .no');
+
+clearCart.addEventListener('click', ()=>{
+	confirmClear.classList.toggle('active');
+})
+yesButton.addEventListener('click', ()=>{
+	var data = [];
+	fetch('clearCart.php')
+	.then(()=> {
+		ReactDOM.render(
+			<Cart_table ref={(Cart_table) => {window.Cart_table = Cart_table}}/>,
+			document.querySelector('#cart_table')
+		)
+		window.Cart_table.updateCart(data)
+	})
+	.then(()=>{
+		confirmClear.classList.toggle('active')
+	})
+})
+noButton.addEventListener('click', ()=>{
+	confirmClear.classList.toggle('active');
+})
+

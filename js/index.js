@@ -28,6 +28,23 @@ blockLv2.forEach(function (e) {
 	};
 });
 
+// update the cart when refreshing the page
+fetch('updateCart.php', {
+	method: 'POST',
+	headers: {
+		"Content-Type": "application/json; charset=utf-8",
+		"Access-Control-Origin": "*"
+	},
+	body: ''
+}).then(function (res) {
+	res.json().then(function (data) {
+		ReactDOM.render(React.createElement(Cart_table, { ref: function ref(Cart_table) {
+				window.Cart_table = Cart_table;
+			} }), document.querySelector('#cart_table'));
+		window.Cart_table.updateCart(data);
+	});
+});
+
 // Send getproduct request
 var catgory = document.querySelector('#catgory');
 
@@ -84,15 +101,20 @@ var Product_detail = function (_React$Component) {
 		};
 
 		_this.sendData = function () {
-			fetch('addToCart.php', {
+			fetch('updateCart.php', {
 				method: 'POST',
 				headers: {
-					"Content-Type": "application/json",
+					"Content-Type": "application/json; charset=utf-8",
 					"Access-Control-Origin": "*"
 				},
 				body: JSON.stringify(_this.state)
 			}).then(function (res) {
-				// console.log(res);
+				res.json().then(function (data) {
+					ReactDOM.render(React.createElement(Cart_table, { ref: function ref(Cart_table) {
+							window.Cart_table = Cart_table;
+						} }), document.querySelector('#cart_table'));
+					window.Cart_table.updateCart(data);
+				});
 			});
 		};
 
@@ -231,13 +253,25 @@ var Product_info = function (_React$Component2) {
 var Cart_table = function (_React$Component3) {
 	_inherits(Cart_table, _React$Component3);
 
-	function Cart_table() {
+	function Cart_table(props) {
 		_classCallCheck(this, Cart_table);
 
-		return _possibleConstructorReturn(this, (Cart_table.__proto__ || Object.getPrototypeOf(Cart_table)).apply(this, arguments));
+		var _this3 = _possibleConstructorReturn(this, (Cart_table.__proto__ || Object.getPrototypeOf(Cart_table)).call(this, props));
+
+		_this3.state = {
+			list: []
+		};
+		return _this3;
 	}
 
 	_createClass(Cart_table, [{
+		key: 'updateCart',
+		value: function updateCart(data) {
+			this.setState({
+				list: data
+			});
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			return React.createElement(
@@ -279,35 +313,16 @@ var Cart_table = function (_React$Component3) {
 				React.createElement(
 					'tbody',
 					null,
-					React.createElement(
-						'tr',
-						null,
-						React.createElement(
-							'td',
-							null,
-							'cheddar cheese'
-						),
-						React.createElement(
-							'td',
-							null,
-							'500 gram'
-						),
-						React.createElement(
-							'td',
-							null,
-							'8.00'
-						),
-						React.createElement(
-							'td',
-							null,
-							'4'
-						),
-						React.createElement(
-							'td',
-							null,
-							'32.00'
-						)
-					)
+					this.state.list.map(function (item, index) {
+						return React.createElement(Cart_list, {
+							product_name: item.product_name,
+							unit_quantity: item.unit_quantity,
+							unit_price: item.unit_price,
+							counts: item.counts,
+							total_price: Math.floor(item.counts * item.unit_price * 100) / 100,
+							key: index
+						});
+					})
 				)
 			);
 		}
@@ -316,4 +331,72 @@ var Cart_table = function (_React$Component3) {
 	return Cart_table;
 }(React.Component);
 
-ReactDOM.render(React.createElement(Cart_table, null), document.querySelector('#cart_table'));
+var Cart_list = function (_React$Component4) {
+	_inherits(Cart_list, _React$Component4);
+
+	function Cart_list() {
+		_classCallCheck(this, Cart_list);
+
+		return _possibleConstructorReturn(this, (Cart_list.__proto__ || Object.getPrototypeOf(Cart_list)).apply(this, arguments));
+	}
+
+	_createClass(Cart_list, [{
+		key: 'render',
+		value: function render() {
+			return React.createElement(
+				'tr',
+				null,
+				React.createElement(
+					'td',
+					null,
+					this.props.product_name
+				),
+				React.createElement(
+					'td',
+					null,
+					this.props.unit_quantity
+				),
+				React.createElement(
+					'td',
+					null,
+					this.props.unit_price
+				),
+				React.createElement(
+					'td',
+					null,
+					this.props.counts
+				),
+				React.createElement(
+					'td',
+					null,
+					this.props.total_price
+				)
+			);
+		}
+	}]);
+
+	return Cart_list;
+}(React.Component);
+
+var clearCart = document.querySelector('#clear_cart');
+var confirmClear = document.querySelector('#confirm_clear');
+var yesButton = document.querySelector('#confirm_clear .yes');
+var noButton = document.querySelector('#confirm_clear .no');
+
+clearCart.addEventListener('click', function () {
+	confirmClear.classList.toggle('active');
+});
+yesButton.addEventListener('click', function () {
+	var data = [];
+	fetch('clearCart.php').then(function () {
+		ReactDOM.render(React.createElement(Cart_table, { ref: function ref(Cart_table) {
+				window.Cart_table = Cart_table;
+			} }), document.querySelector('#cart_table'));
+		window.Cart_table.updateCart(data);
+	}).then(function () {
+		confirmClear.classList.toggle('active');
+	});
+});
+noButton.addEventListener('click', function () {
+	confirmClear.classList.toggle('active');
+});

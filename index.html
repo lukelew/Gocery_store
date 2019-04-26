@@ -113,10 +113,20 @@
 				<h2>Shopping Cart <i class="fas fa-shopping-cart"></i></h2>
 				<div id="cart_table"></div>
 				<div class="button_box">
-					<a href="clearCart.php" id="clear_cart">Clear Cart</a>
-					<a href="###" id="check_out">Check out</a>
+					<div id="confirm_clear">
+						<p>Do you want to clear the whole cart?</p>
+						<a class="yes">yes</a>
+						<a class="no">no</a>
+						<i></i>
+					</div>
+					<a id="clear_cart">Clear Cart</a>
+					<a id="check_out">Check out</a>
 				</div>
 			</div>
+		</div>
+		<!-- overlay -->
+		<div id="pop_layer">
+			<div id="pop_box"></div>
 		</div>
 	</div>
 <script type="module" src="js/index.js"></script>
