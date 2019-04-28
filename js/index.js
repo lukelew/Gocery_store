@@ -28,7 +28,7 @@ blockLv2.forEach(function (e) {
 	};
 });
 
-// update the cart when refreshing the page
+// Update the cart when refreshing the page
 fetch('updateCart.php', {
 	method: 'POST',
 	headers: {
@@ -40,7 +40,7 @@ fetch('updateCart.php', {
 	res.json().then(function (data) {
 		ReactDOM.render(React.createElement(Cart_table, { ref: function ref(Cart_table) {
 				window.Cart_table = Cart_table;
-			} }), document.querySelector('#cart_table'));
+			} }), document.querySelector('#cart_table_box'));
 		window.Cart_table.updateCart(data);
 	});
 });
@@ -77,21 +77,28 @@ var Product_detail = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Product_detail.__proto__ || Object.getPrototypeOf(Product_detail)).call(this, props));
 
 		_this.reduceQuantity = function () {
-			if (_this.state.counts == 1) {
+			if (_this.state.counts <= 1) {
 				_this.setState({
 					counts: 1
 				});
 			} else {
 				_this.setState({
-					counts: _this.state.counts - 1
+					counts: Number(_this.state.counts) - 1
 				});
 			}
 		};
 
 		_this.addQuantity = function () {
-			_this.setState({
-				counts: _this.state.counts + 1
-			});
+			if (_this.state.counts >= 20) {
+				_this.setState({
+					counts: 20
+				});
+				warningBox("You can't buy more than 20 one time");
+			} else {
+				_this.setState({
+					counts: Number(_this.state.counts) + 1
+				});
+			}
 		};
 
 		_this.changeHanlder = function (e) {
@@ -112,7 +119,7 @@ var Product_detail = function (_React$Component) {
 				res.json().then(function (data) {
 					ReactDOM.render(React.createElement(Cart_table, { ref: function ref(Cart_table) {
 							window.Cart_table = Cart_table;
-						} }), document.querySelector('#cart_table'));
+						} }), document.querySelector('#cart_table_box'));
 					window.Cart_table.updateCart(data);
 				});
 			});
@@ -155,11 +162,16 @@ var Product_detail = function (_React$Component) {
 					'div',
 					{ id: 'quantity_button' },
 					React.createElement(
+						'p',
+						null,
+						'Quantity'
+					),
+					React.createElement(
 						'a',
 						{ id: 'reduce_button', onClick: this.reduceQuantity },
 						React.createElement('i', { className: 'fas fa-minus' })
 					),
-					React.createElement('input', { id: 'quantity_number', type: 'number', onChange: this.changeHanlder.bind(this), value: this.state.counts, maxLength: '5' }),
+					React.createElement('input', { id: 'quantity_number', type: 'number', onChange: this.changeHanlder.bind(this), value: this.state.counts }),
 					React.createElement(
 						'a',
 						{ id: 'add_button', onClick: this.addQuantity },
@@ -272,6 +284,11 @@ var Cart_table = function (_React$Component3) {
 			});
 		}
 	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			checkOut();
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			return React.createElement(
@@ -378,6 +395,9 @@ var Cart_list = function (_React$Component4) {
 	return Cart_list;
 }(React.Component);
 
+// Clear the cart
+
+
 var clearCart = document.querySelector('#clear_cart');
 var confirmClear = document.querySelector('#confirm_clear');
 var yesButton = document.querySelector('#confirm_clear .yes');
@@ -391,7 +411,7 @@ yesButton.addEventListener('click', function () {
 	fetch('clearCart.php').then(function () {
 		ReactDOM.render(React.createElement(Cart_table, { ref: function ref(Cart_table) {
 				window.Cart_table = Cart_table;
-			} }), document.querySelector('#cart_table'));
+			} }), document.querySelector('#cart_table_box'));
 		window.Cart_table.updateCart(data);
 	}).then(function () {
 		confirmClear.classList.toggle('active');
@@ -399,4 +419,268 @@ yesButton.addEventListener('click', function () {
 });
 noButton.addEventListener('click', function () {
 	confirmClear.classList.toggle('active');
+});
+
+var Order_list = function (_React$Component5) {
+	_inherits(Order_list, _React$Component5);
+
+	function Order_list(props) {
+		_classCallCheck(this, Order_list);
+
+		var _this5 = _possibleConstructorReturn(this, (Order_list.__proto__ || Object.getPrototypeOf(Order_list)).call(this, props));
+
+		_this5.state = {
+			list: [],
+			orderPrice: 0
+		};
+		return _this5;
+	}
+
+	_createClass(Order_list, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			var _this6 = this;
+
+			fetch('getOrder.php').then(function (res) {
+				return res.json();
+			}).then(function (data) {
+				return _this6.setState({ list: data });
+			}).then(function () {
+				_this6.state.list.map(function (item) {
+					_this6.setState({
+						orderPrice: _this6.state.orderPrice += item.counts * item.unit_price
+					});
+				});
+				var fixedPrice = _this6.state.orderPrice;
+				_this6.setState({
+					orderPrice: fixedPrice.toFixed(2)
+				});
+			});
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			return React.createElement(
+				React.Fragment,
+				null,
+				React.createElement(
+					'table',
+					null,
+					React.createElement(
+						'thead',
+						null,
+						React.createElement(
+							'tr',
+							null,
+							React.createElement(
+								'th',
+								null,
+								'Product Name'
+							),
+							React.createElement(
+								'th',
+								null,
+								'Unit Quantity'
+							),
+							React.createElement(
+								'th',
+								null,
+								'Unit Price'
+							),
+							React.createElement(
+								'th',
+								null,
+								'Quantity'
+							),
+							React.createElement(
+								'th',
+								null,
+								'Total Price'
+							)
+						)
+					),
+					React.createElement(
+						'tbody',
+						null,
+						this.state.list.map(function (item, index) {
+							return React.createElement(
+								'tr',
+								{ key: index },
+								React.createElement(
+									'td',
+									null,
+									item.product_name
+								),
+								React.createElement(
+									'td',
+									null,
+									item.unit_quantity
+								),
+								React.createElement(
+									'td',
+									null,
+									item.unit_price
+								),
+								React.createElement(
+									'td',
+									null,
+									item.counts
+								),
+								React.createElement(
+									'td',
+									null,
+									Math.floor(item.counts * item.unit_price * 100) / 100
+								)
+							);
+						})
+					)
+				),
+				React.createElement(
+					'div',
+					{ id: 'total_price' },
+					React.createElement(
+						'p',
+						null,
+						'Order Total Price:'
+					),
+					React.createElement(
+						'strong',
+						null,
+						this.state.orderPrice
+					)
+				)
+			);
+		}
+	}]);
+
+	return Order_list;
+}(React.Component);
+
+// Check out 
+
+
+function checkOut() {
+	var checkout = document.querySelector('#check_out');
+	var cartTableBody = document.querySelector('#cart_table tbody');
+	var popLayer = document.querySelector('#pop_layer');
+	var closeOrder = document.querySelector('#pop_layer .close');
+	var warningForm = document.querySelector('#user_form .warning');
+
+	checkout.addEventListener('click', function () {
+		if (cartTableBody.hasChildNodes()) {
+			popLayer.classList.toggle('active');
+			ReactDOM.render(React.createElement(Order_list, null), document.querySelector('#order_list'));
+		} else {
+			warningBox('Oops! There are no products in your cart');
+		}
+	});
+
+	closeOrder.addEventListener('click', function () {
+		popLayer.classList.toggle('active');
+		warningForm.classList.remove('active');
+		ReactDOM.unmountComponentAtNode(document.querySelector('#order_list'));
+	});
+}
+
+function warningBox(text) {
+	var warningBox = document.querySelector('#warning');
+	var contentBox = document.querySelector('#warning strong');
+
+	contentBox.innerText = text;
+	warningBox.classList.add('active');
+
+	var toggleWarning = function toggleWarning() {
+		warningBox.classList.remove('active');
+	};
+
+	clearTimeout(toggleWarning);
+	setTimeout(toggleWarning, 3000);
+}
+
+// Validate the form
+function validateForm() {
+	var popLayer = document.querySelector('#pop_layer');
+	var name = document.querySelector("input[name='name']");
+	var address = document.querySelector("input[name='address']");
+	var suburb = document.querySelector("input[name='suburb']");
+	var state = document.querySelector("input[name='state']");
+	var country = document.querySelector("input[name='country']");
+	var email = document.querySelector("input[name='email']");
+	var warningForm = document.querySelector('#user_form .warning');
+
+	function warningInfo(text) {
+		var warningSpan = document.querySelector('#user_form .warning span');
+		warningForm.classList.add('active');
+		warningSpan.innerText = text;
+	}
+
+	function validateEmail(email) {
+		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return re.test(String(email).toLowerCase());
+	}
+
+	if (name.value == '') {
+		warningInfo('You should input your name');
+		return false;
+	} else if (address.value == '') {
+		warningInfo('You should input your address');
+		return false;
+	} else if (suburb.value == '') {
+		warningInfo('You should input your suburb');
+		return false;
+	} else if (state.value == '') {
+		warningInfo('You should input your state');
+		return false;
+	} else if (country.value == '') {
+		warningInfo('You should input your country');
+		return false;
+	} else if (email.value == '') {
+		warningInfo('You should input your email');
+		return false;
+	} else if (!validateEmail(email.value)) {
+		warningInfo('Invalidate email address');
+		return false;
+	} else {
+		warningForm.classList.remove('active');
+		var formData = {
+			name: name.value,
+			address: address.value,
+			suburb: suburb.value,
+			state: state.value,
+			country: country.value,
+			email: email.value
+		};
+		fetch('sendemail.php', {
+			method: 'POST',
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+				"Access-Control-Origin": "*"
+			},
+			body: JSON.stringify(formData)
+		}).then(function (res) {
+			popLayer.classList.toggle('active');
+			warningForm.classList.remove('active');
+			ReactDOM.unmountComponentAtNode(document.querySelector('#order_list'));
+			fetch('clearCart.php').then(function () {
+				var data = [];
+				ReactDOM.render(React.createElement(Cart_table, { ref: function ref(Cart_table) {
+						window.Cart_table = Cart_table;
+					} }), document.querySelector('#cart_table_box'));
+				window.Cart_table.updateCart(data);
+			}).then(function () {
+				successLayer.classList.add('active');
+			});
+		});
+	}
+}
+
+var purchaseButton = document.querySelector('#purchase_button');
+purchaseButton.addEventListener('click', function () {
+	validateForm();
+});
+
+var successLayer = document.querySelector('#success_lay');
+var successButton = document.querySelector('#success_lay span');
+successButton.addEventListener('click', function () {
+	successLayer.classList.remove('active');
 });
