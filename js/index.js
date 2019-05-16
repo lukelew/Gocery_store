@@ -93,7 +93,7 @@ var Product_detail = function (_React$Component) {
 				_this.setState({
 					counts: 20
 				});
-				warningBox("You can't buy more than 20 one time");
+				warningBox("You can't add more than 20 one time");
 			} else {
 				_this.setState({
 					counts: Number(_this.state.counts) + 1
@@ -183,7 +183,7 @@ var Product_detail = function (_React$Component) {
 					{ id: 'add_to_cart' },
 					React.createElement(
 						'a',
-						{ onClick: this.sendData },
+						{ className: 'green_btn', onClick: this.sendData },
 						'Add to Cart'
 					)
 				)
@@ -415,6 +415,7 @@ yesButton.addEventListener('click', function () {
 		window.Cart_table.updateCart(data);
 	}).then(function () {
 		confirmClear.classList.toggle('active');
+		warningBox('The cart has been cleared successfully!');
 	});
 });
 noButton.addEventListener('click', function () {

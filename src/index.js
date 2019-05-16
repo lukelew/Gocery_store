@@ -105,7 +105,7 @@ class Product_detail extends React.Component {
   		this.setState({
   			counts: 20
   		})
-  		warningBox("You can't buy more than 20 one time")
+  		warningBox("You can't add more than 20 one time")
   	}
   	else{
   		this.setState({
@@ -158,7 +158,7 @@ class Product_detail extends React.Component {
 					<a id="add_button" onClick={this.addQuantity}><i className="fas fa-plus"></i></a>
 				</div>
 				<div id="add_to_cart">
-					<a onClick={this.sendData}>Add to Cart</a>	
+					<a className="green_btn" onClick={this.sendData}>Add to Cart</a>	
 				</div>
 			</React.Fragment>
 		)
@@ -272,6 +272,7 @@ yesButton.addEventListener('click', ()=>{
 	})
 	.then(()=>{
 		confirmClear.classList.toggle('active')
+		warningBox('The cart has been cleared successfully!')
 	})
 })
 noButton.addEventListener('click', ()=>{

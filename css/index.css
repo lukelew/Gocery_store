@@ -17,15 +17,25 @@ input[type=number] {
 html,body,#root{
 	width: 100%;
 }
-.red_btn{
+#root .red_btn{
 	color: #fff;
 	background: #e07979;
 }
-.red_btn:hover{
+#root .red_btn:hover{
 	background: #e88989;
 }
-.red_btn:active{
+#root .red_btn:active{
 	background: #bf6363;
+}
+#root .green_btn{
+	color: #fff;
+	background: #42ccb4;
+}
+#root .green_btn:hover{
+	background: #5be2cb;
+}
+#root .green_btn:active{
+	background: #3dccb2;
 }
 #root{
 	display: flex;
@@ -47,20 +57,18 @@ html,body,#root{
 .block{
 	padding: 8px 10px;
 	height: 18px;
-	background: #4be6ce;
-	color: #000;
+	background: #fff;
+	color: #31415f;
 	border-radius: 5px;
-	font-size: 12px;
+	font-size: 14px;
 	text-align: center;
 	font-family: 'Roboto Slab', serif;
 	transition: all .3s ease;
 	cursor: pointer;
-}
-.clickable{
-	background: #62beff;
+	box-shadow: 0px 0px 7px -3px #000000d4;
 }
 #catgory{
-	width: 580px;
+	width: 680px;
 	margin: 0 auto;
 	padding: 40px 0 0 0;
 }
@@ -70,23 +78,28 @@ html,body,#root{
 	grid-template-columns: auto 140px auto;
 	justify-items: center;
 	align-items: center;
+	background: url(../images/line_lv1.png);
 }
 #level1 .block{
 	grid-column: 2;
 	grid-row: 1;
 }
 #level2 .block:hover{
-	background: #8de8f8;
+	box-shadow: 0px 0px 13px -3px #000000d4;
 }
 #level2{
 	height: 60px;
 	display: grid;
 	justify-items: center;
-	align-items: center;
+	align-items: end;
+	background: url(../images/line_lv2.png);
 }
 #level2 .block{
 	grid-column: auto;
 	grid-row: 1; 
+}
+#level3{
+	position: relative;
 }
 .level3{
 	height: 60px;
@@ -109,7 +122,7 @@ html,body,#root{
 	grid-row: 1;
 }
 #frozen_food .level4{
-	grid-template-columns: 130px 100px 100px 80px 80px; 
+	grid-template-columns: 165px 100px 100px 160px 80px; 
 }
 #frozen_food .level4 .block:nth-child(1){
 	grid-column-start: 2;
@@ -129,10 +142,16 @@ html,body,#root{
 	height: 34px;
 }
 #fresh_food .level4{
-	grid-template-columns: 120px 100px 100px auto; 
+	grid-template-columns: 25px 120px 100px 100px; 
+}
+#fresh_food .level4 .block:nth-child(1){
+	grid-column-start: 2;
+}
+#fresh_food .level4 .block:nth-child(2){
+	grid-column-start: 3;
 }
 #beverages .level3{
-	grid-template-columns: 100px 120px 140px 160px auto;
+	grid-template-columns: 40px 160px 250px 160px;
 }
 #beverages .level3 .block:nth-child(1){
 	grid-column-start: 2;
@@ -144,7 +163,7 @@ html,body,#root{
 	grid-column-start: 4;
 }
 #beverages .level4{
-	grid-template-columns: 30px 80px 110px 80px 90px 90px;
+	grid-template-columns: 10px 90px 100px 30px 90px 90px 90px;
 }
 #beverages .level4 .block:nth-child(1){
 	grid-column-start: 2;
@@ -153,16 +172,16 @@ html,body,#root{
 	grid-column-start: 3;
 }
 #beverages .level4 .block:nth-child(3){
-	grid-column-start: 4;
-}
-#beverages .level4 .block:nth-child(4){
 	grid-column-start: 5;
 }
-#beverages .level4 .block:nth-child(5){
+#beverages .level4 .block:nth-child(4){
 	grid-column-start: 6;
 }
+#beverages .level4 .block:nth-child(5){
+	grid-column-start: 7;
+}
 #home_health .level4{
-	grid-template-columns: 60px 70px 80px 60px 120px 120px;
+	grid-template-columns: 80px 100px 80px 60px 150px 120px;
 }
 #home_health .level4 .block:nth-child(1){
 	grid-column-start: 2;
@@ -177,11 +196,11 @@ html,body,#root{
 	grid-column-start: 6;
 }
 #pet_food .level3{
-	width: 400px;
+	width: 560px;
 	margin: 0 auto;
 }
 #pet_food .level4{
-	grid-template-columns: 240px 100px 80px 60px 120px 120px;
+	grid-template-columns: 310px 90px 110px;
 }
 #pet_food .level4 .block:nth-child(1){
 	grid-column-start: 2;
@@ -189,12 +208,36 @@ html,body,#root{
 #pet_food .level4 .block:nth-child(2){
 	grid-column-start: 3;
 }
+#frozen_food{
+	background: url(../images/line_lv3_1.png);
+}
+#fresh_food{
+	background: url(../images/line_lv3_2.png);
+}
+#beverages{
+	background: url(../images/line_lv3_3.png);
+}
+#home_health{
+	background: url(../images/line_lv3_4.png);
+}
+#pet_food{
+	background: url(../images/line_lv3_5.png);
+}
 #frozen_food,
 #fresh_food,
 #beverages,
 #home_health,
 #pet_food{
-	display: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 5;
+	width: 100%;
+	padding: 20px 0 0 0;
+	transition: all .3s ease;
+	pointer-events: none;
+	opacity: 0;
+	transform: translateY(20px);
 }
 
 #frozen_food.active,
@@ -202,7 +245,9 @@ html,body,#root{
 #beverages.active,
 #home_health.active,
 #pet_food.active{
-	display: contents;
+	opacity: 1;
+	transform: translateY(0);
+	pointer-events: auto;
 }
 /*right area*/
 #right{
@@ -485,6 +530,7 @@ html,body,#root{
 	height: 20px;
 	border-radius: 3px;
 	text-align: center;
+	cursor: pointer;
 }
 #checkout_box i{
 	transition: all .3s ease;
@@ -556,6 +602,10 @@ html,body,#root{
 #user_form .row{
 	margin: 0 0 10px 0;
 }
+#user_form span{
+	color: #c73c3c;
+	padding: 0 5px;
+}
 #user_form input{
 	font-size: 14px;
 	padding: 6px 0 6px 5px;
@@ -589,7 +639,7 @@ html,body,#root{
 #user_form .warning{
 	visibility: hidden;
 	font-size: 16px;
-	color: #f00;
+	color: #e07979;
 }
 #user_form .warning.active{
 	visibility: visible;

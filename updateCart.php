@@ -17,12 +17,12 @@
 		foreach ($_SESSION['cart'] as $index => $eachLine) {
 			foreach ($eachLine as $key => $value) {
 				if($new_id == $value){
-					$exsit_id = $index;
+					$exist_id = $index;
 				}
 			}
 		}
-		if(isset($exsit_id)){
-			$_SESSION['cart'][$exsit_id]['counts'] += $new_count;
+		if(isset($exist_id)){
+			$_SESSION['cart'][$exist_id]['counts'] += $new_count;
 		}
 		else{
 			array_push($_SESSION['cart'], $new_data);
